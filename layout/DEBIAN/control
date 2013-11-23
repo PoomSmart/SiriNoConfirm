@@ -1,0 +1,8 @@
+Package: org.thebigboss.sirinoconfirm
+Name: SiriNoConfirm
+Depends: mobilesubstrate, firmware (>= 5.0), gsc.assistant
+Version: 1.0
+Architecture: iphoneos-arm
+Description: Remove Siri confirmation view when you toggle it.
+Author: PoomSmart
+Section: Tweaks
