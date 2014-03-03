@@ -25,28 +25,9 @@
 
 %end
 
-%group SiriPrefHook2
+%group PrefHook
 
-%hook AssistantController
-
-- (void)setAssistantEnabled:(NSNumber *)enabled forSpecifier:(id)specifier
-{
-	[self setAssistantEnabled:[enabled intValue] == 1 ? YES : NO];
-	if ([enabled intValue] == 1) {
-		[self assistantEnabledConfirmed:specifier];
-	}
-	else {
-		[self assistantDisabledConfirmed:specifier];
-	}
-}
-
-%end
-
-%end
-
-%group PrefHookNew
-
-%hook PSListController
+%hook PrefController
 
 - (void)lazyLoadBundle:(PSSpecifier *)bundle
 {
@@ -59,27 +40,9 @@
 
 %end
 
-%group PrefHookOld
-
-%hook PSRootController
-
-- (void)lazyLoadBundle:(PSSpecifier *)bundle
-{
-	%orig;
-	if ([bundle.name isEqualToString:@"Siri"])
-		%init(SiriPrefHook2, AssistantController = objc_getClass("AssistantController"));
-}
-
-%end
-
-%end
-
 %ctor
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    if (kCFCoreFoundationVersionNumber >= 793.00)
-    	%init(PrefHookNew);
-    else
-    	%init(PrefHookOld);
+    %init(PrefHook, PrefController = kCFCoreFoundationVersionNumber >= 793.00 ? objc_getClass("PSListController") : objc_getClass("PSRootController"));
     [pool drain];
 }
