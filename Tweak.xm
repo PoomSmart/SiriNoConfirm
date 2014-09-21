@@ -10,10 +10,11 @@
 
 %hook AssistantController
 
-- (void)setAssistantEnabled:(NSNumber *)enabled forSpecifier:(id)specifier
+- (void)setAssistantEnabled:(NSNumber *)value forSpecifier:(id)specifier
 {
-	[self setAssistantEnabled:[enabled intValue] == 1 ? YES : NO];
-	if ([enabled intValue] == 1) {
+	BOOL enabled = [value intValue] == 1;
+	[self setAssistantEnabled:enabled];
+	if (enabled) {
 		[self assistantEnabledConfirmed:specifier];
 	}
 	else {
